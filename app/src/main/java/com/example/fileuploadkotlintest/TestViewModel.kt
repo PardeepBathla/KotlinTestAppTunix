@@ -1,30 +1,31 @@
 package com.example.fileuploadkotlintest
 
-import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.ViewModel
-import androidx.lifecycle.viewModelScope
-import com.ankit.trendinggit.model.TestResponse
+import android.content.Context
+import android.net.Uri
+import androidx.lifecycle.*
+import com.example.fileuploadkotlintest.model.TestResponse
+import com.ankit.trendinggit.model.api.ApiService
 import com.example.fileuploadkotlintest.model.api.RetrofitInstance
+import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
+import kotlinx.coroutines.async
 
 class TestViewModel : ViewModel() {
-    lateinit var testLiveData : MutableLiveData<TestResponse>
+    var testLiveData : LiveData<TestResponse> = MutableLiveData()
+    var testRepository:TestRepository = TestRepository()
 
-    init {
-        testLiveData = MutableLiveData()
-    }
-
-    fun getDataObserver():MutableLiveData<TestResponse>{
+    fun getDataObserver():LiveData<TestResponse>{
         return testLiveData
     }
 
-    fun makeApiCall(){
-        viewModelScope.launch (Dispatchers.IO){
 
-            val response = RetrofitInstance.instance.uploadImage()
-//            testLiveData.postValue(response)
+    fun makeApiCall( context: Context,uri: Uri?,callback: UploadFileCallback){
+        CoroutineScope(Dispatchers.IO).async{
+
+         testLiveData =  testRepository.uploadImage(context,uri,callback)
+//
         }
+
     }
 
 }

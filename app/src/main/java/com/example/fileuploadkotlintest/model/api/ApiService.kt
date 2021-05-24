@@ -1,12 +1,13 @@
 package com.ankit.trendinggit.model.api
 
-import com.ankit.trendinggit.model.TestResponse
+import com.example.fileuploadkotlintest.model.TestResponse
+import okhttp3.MultipartBody
 import retrofit2.Call
-import retrofit2.http.GET
-import retrofit2.http.Query
+import retrofit2.http.*
 
 interface ApiService {
 
-    @GET("search/repositories")
-    suspend fun uploadImage(): Call<TestResponse>
+    @Multipart
+    @POST("search/repositories")
+    fun uploadImage(@Part imageFile: MultipartBody.Part ):Call<TestResponse>
 }
